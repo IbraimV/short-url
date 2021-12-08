@@ -8,7 +8,7 @@
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;600&display=swap" rel="stylesheet">
-
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         <!-- Styles -->
         <style>
             html, body {
@@ -64,37 +64,52 @@
         </style>
     </head>
     <body>
-        <div class="flex-center position-ref full-height">
-            @if (Route::has('login'))
-                <div class="top-right links">
-                    @auth
-                        <a href="{{ url('/home') }}">Home</a>
-                    @else
-                        <a href="{{ route('login') }}">Login</a>
-
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}">Register</a>
-                        @endif
-                    @endauth
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <h1>Генератор ссылок</h1>
                 </div>
-            @endif
+                <div class="col-md-12">
+                    <h3>Форма генерации ссылок</h3>
+                    <form action="/submit" id="form" method="get">
+                        <input type="text" name="url" class="form-control" placeholder="Введите ссылку">
+                        <button class="mt-3 mb-3">
+                            Сгенерировать
+                        </button>
+                    </form>
+                    <div class="color-red errors">
 
-            <div class="content">
-                <div class="title m-b-md">
-                    Laravel
-                </div>
+                    </div>
+                    <div class="color-blue success">
 
-                <div class="links">
-                    <a href="https://laravel.com/docs">Docs</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://blog.laravel.com">Blog</a>
-                    <a href="https://nova.laravel.com">Nova</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://vapor.laravel.com">Vapor</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
+                    </div>
                 </div>
             </div>
         </div>
     </body>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script>
+        $('#form').on('submit', function(e){
+            e.preventDefault();
+            $.ajax({
+                    url: $(this).attr('action'),
+                    type: "GET",
+                    data: $(this).serialize(),
+                    success: function(data){
+                        if(data.success == 'false') {
+                            $('.form-control').addClass('is-invalid');
+                            $('.errors').html('<p>'+ data.errors + '</p>')
+                            console.log(data.success);
+                        } else {
+                            $('.form-control').removeClass('is-invalid');
+                            $('.form-control').removeClass('is-valid');
+                            $('.errors').html();
+                            $('.success').html('<a href="'+ data.result +'">'+ data.result + '</a>')
+                        }
+                    }
+                });
+        })
+    </script>
 </html>
