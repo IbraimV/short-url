@@ -72,6 +72,7 @@
                 <div class="col-md-12">
                     <h3>Форма генерации ссылок</h3>
                     <form action="/submit" id="form" method="get">
+                        @csrf
                         <input type="text" name="url" class="form-control" placeholder="Введите ссылку">
                         <button class="mt-3 mb-3">
                             Сгенерировать
@@ -95,7 +96,7 @@
             e.preventDefault();
             $.ajax({
                     url: $(this).attr('action'),
-                    type: "GET",
+                    type: "POST",
                     data: $(this).serialize(),
                     success: function(data){
                         if(data.success == 'false') {

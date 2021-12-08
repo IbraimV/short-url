@@ -16,5 +16,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('submit', 'UrlController@store');
+Route::post('submit', 'UrlController@store');
 Route::get('i/{code}', 'UrlController@redirect');
